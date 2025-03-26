@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     message: String,
     nickName: String,
-    profilePic: Object
+    profilePic: Image
 
 });
 

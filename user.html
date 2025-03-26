@@ -43,6 +43,7 @@
 
             if (user) {
                 welcomeMessage.innerText = "Welcome, " + user.nickName + "!";
+
             }
         }
 
@@ -51,19 +52,39 @@
             const profilePicture = document.getElementById("profilePicture");
 
             if (user) {
-                profilePicture.src = user.profilePic;
+                if (localStorage.getItem('user.profilePic')) {
+                    profilePicture.src = localStorage.getItem('user.profilePic');
+                }
+                    profilePicture.src = user.profilePic;
             }
         }
 
         // Function to clear the session and redirect to the login page
         function logout() {
             localStorage.removeItem("loggedInUser");
+
             window.location.href = "login.html";
+        }
+
+        function setProfilePicture() {
+            const user = checkIfLoggedIn();
+            const uploadedImage = document.getElementById("uploadedImage");
+            const imageUploadForm = document.getElementById("imageUploadForm");
+
+            user.profilePic = uploadedImage.src;
+            localStorage.setItem("loggedInUser", JSON.stringify(user.profilePic));
+            alert("Image is now set as profile photo")
+           //imageUploadForm.style.display = "none";
         }
 
         // Call the displayUsername function on page load
         displayUsername();
+
+        
     </script>
+
+
+
 </body>
 
 <body>
@@ -86,21 +107,28 @@
                     imageUploadForm.style.display = "none"; // Hide the upload form if profile picture exists
                 }
             </script>
-            <h2>Uploaded Image:</h2>
+
+
+            <h2>Uploaded Image:
+            <button type="button" onclick="setProfilePicture()">Set as Profile Picture</button>
+        </h2>
             <img id="uploadedImage" class="uploaded-image" src="" alt="No image uploaded yet">
         </div>
     </div>
 
 
-
-
-    
     <script>
         // Function to handle image upload and display
         function uploadImage() {
             
             const imageInput = document.getElementById("imageInput");
             const uploadedImage = document.getElementById("uploadedImage");
+            
+            
+            bannerImage = document.getElementById('uploadedImage');
+            tempProfilePic = getBase64Image(bannerImage);
+            localStorage.setItem('user.profilePic', tempProfilePic);
+
 
             if (imageInput.files && imageInput.files[0]) {
                 const reader = new FileReader();
@@ -137,7 +165,7 @@
 
             document.addEventListener("mousemove", (e) => {
                 if (isResizing) {
-                    const dx = e.clientX - startX;
+                    const dx = (e.clientX - startX)*1.618034;
                     const dy = e.clientY - startY;
 
                     // Calculate new width and height while maintaining aspect ratio
