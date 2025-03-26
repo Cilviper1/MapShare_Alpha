@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+          // Function to check if the user is logged in
+          function checkIfLoggedIn() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+
+            // If user is not logged in, redirect to login page
+            if (!loggedInUser) {
+                window.location.href = "login.html";
+            }
+
+            // If user is logged in, return the user object
+            return JSON.parse(loggedInUser);
+        }
+
+    </script>
+    <script src="loginHandler.js"></script>
+</head>
+
+<body>
+   
+    <button onclick="logout()"">Logout</button>
+    <div>
+        <h1><span id='userName'></span></h1>
+        <input type="text" id="newName" placeholder="Enter a new nickname">
+        <button onclick="changeNickName(document.getElementById('newName').value)"">Update Nickname</button>
+    </div>
+
+    <script>
+      
+
+        // Function to display the username on the welcome page
+        function displayUsername() {
+            const user = checkIfLoggedIn();
+            const welcomeMessage = document.getElementById("userName");
+
+            if (user) {
+                welcomeMessage.innerText = "Welcome, " + user.nickName + "!";
+            }
+        }
+
+        function displayProfilePicture() {
+            const user = checkIfLoggedIn();
+            const profilePicture = document.getElementById("profilePicture");
+
+            if (user) {
+                profilePicture.src = user.profilePic;
+            }
+        }
+
+        // Function to clear the session and redirect to the login page
+        function logout() {
+            localStorage.removeItem("loggedInUser");
+            window.location.href = "login.html";
+        }
+
+        // Call the displayUsername function on page load
+        displayUsername();
+    </script>
+</body>
+
+<body>
+    <div>
+        <h1 id="welcomeMessage"></h1>
+        <form id="imageUploadForm">
+            <label for="imageInput">Upload an image:</label>
+            <input type="file" id="imageInput" accept="image/*" title="Select an image to upload">
+            <button type="button" onclick="uploadImage()">Upload Image</button>
+        </form>
+        <div id="uploadedImageContainer">
+            <script>
+                // Check if wthe user has a profile picture and display it
+                const user = checkIfLoggedIn();
+                const uploadedImage = document.getElementById("uploadedImage");
+                const imageUploadForm = document.getElementById("imageUploadForm");
+
+                if (user && user.profilePic) {
+                    uploadedImage.src = user.profilePic;
+                    imageUploadForm.style.display = "none"; // Hide the upload form if profile picture exists
+                }
+            </script>
+            <h2>Uploaded Image:</h2>
+            <img id="uploadedImage" class="uploaded-image" src="" alt="No image uploaded yet">
+        </div>
+    </div>
+
+
+
+
+    
+    <script>
+        // Function to handle image upload and display
+        function uploadImage() {
+            
+            const imageInput = document.getElementById("imageInput");
+            const uploadedImage = document.getElementById("uploadedImage");
+
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadedImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                alert("Please select an image to upload.");
+            }
+        }
+
+
+        // Function to enable resizing of the uploaded image while maintaining aspect ratio
+        function enableImageResizing() {
+            const uploadedImage = document.getElementById("uploadedImage");
+
+            let isResizing = false;
+            let startX, startY, startWidth, startHeight;
+
+            uploadedImage.style.position = "relative";
+            uploadedImage.style.cursor = "nwse-resize";
+
+            uploadedImage.addEventListener("mousedown", (e) => {
+                isResizing = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startWidth = uploadedImage.offsetWidth;
+                startHeight = uploadedImage.offsetHeight;
+                e.preventDefault();
+            });
+
+            document.addEventListener("mousemove", (e) => {
+                if (isResizing) {
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+
+                    // Calculate new width and height while maintaining aspect ratio
+                    const aspectRatio = startWidth / startHeight;
+                    let newWidth = startWidth + dx;
+                    let newHeight = newWidth / aspectRatio;
+
+                    // Apply the new dimensions
+                    uploadedImage.style.width = newWidth + "px";
+                    uploadedImage.style.height = newHeight + "px";
+                }
+            });
+
+            document.addEventListener("mouseup", () => {
+                isResizing = false;
+            });
+        }
+
+        // Call the function to enable resizing
+        enableImageResizing();
+
+        // Display the current nickname when the page loads
+        displayUsername();
+    </script>
+    
+</body>
+
+</html>

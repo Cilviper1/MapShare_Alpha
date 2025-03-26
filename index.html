@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script>
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+        window.location.href = "user.html";
+    }
+</script>
+<body>
+    <div class="container">
+        
+         <button type="button" onclick="redirectLogin()">LOGIN</button>
+        <h2>User Registration</h2>
+        <div class="container">
+            <script>
+                function redirectLogin() {
+                    window.location.href = "login.html";
+                }
+            </script>
+                   
+                </form>
+            </div>
+        <form id="registrationForm">
+            
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" required><br>
+            <p></p>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" required><br>
+            <p></p>
+            <label for="nickName">Nickname:</label><br>
+            <input type="nickName" id="nickName" required><br>
+            <p></p>
+            <label for="phoneNumber">Phone Number:</label><br>
+            <t><input type="tel" id="phoneNumber" required><br>
+            <p></p>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" required><br>
+            <p></p>
+            <label for="confirmPassword">Confirm Password:</label><br>
+            <input type="password" id="confirmPassword" required><br>
+            <p></p>
+            <button type="button" onclick="registerUser()">Register</button><br>
+            <input type="hidden" id="fileName" value="user_details.txt"><br>
+
+        </form>
+    </div>
+
+    <script src="loginHandler.js"></script>
+</body>
+
+
+</html>

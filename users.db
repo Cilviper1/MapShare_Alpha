@@ -1,0 +1,60 @@
+import { profile } from 'console';
+
+// Import required modules
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+// Initialize the app
+const app = express();
+
+
+
+// Middleware to parse incoming form data
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/mapshare_users', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+
+// Define a schema for user data
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    message: String,
+    nickName: String,
+    profilePic: Object
+
+});
+
+// Create a model for the schema
+const User = mongoose.model('User', userSchema);
+
+// Route to handle form submissions
+app.post('/submit', async (req, res) => {
+    try {
+        // Create a new user document from the submitted data
+        const newUser = new User({
+            name: req.body.name,
+            email: req.body.email,
+            message: req.body.message,
+        });
+
+        // Save the user document to the database
+        await newUser.save();
+
+        // Send a success response
+        res.send('User data saved successfully!');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while saving user data.');
+    }
+});
+
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
