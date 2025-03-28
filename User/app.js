@@ -3,7 +3,7 @@
 // It uses the node-localstorage package to store the user's login information
 const express = require('express');
 const bodyParser = require('body-parser');
-const { handleLoginFormSubmission } = require('./loginHandler');
+const { handleLoginFormSubmission } = require('loginHandler');
 const { LocalStorage } = require('node-localstorage');
 const localStorage = new LocalStorage('./scratch'); // Specify a directory for storage
 

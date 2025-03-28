@@ -1,20 +1,10 @@
 // Function to get user data from localStorage
-function debugLocalStorage() {
 
-    if (typeof window !== 'undefined') {
-  
-      console.log('localStorage keys:', Object.keys(localStorage));
-  
-    } else {
-  
-      console.log('localStorage is not available in this environment.');
-  
-    }
-  
+if (typeof localStorage !== 'undefined') {
+    const data = localStorage.getItem(key)
+    // rest of the code ...
   }
-
-
-  function getUsersFromLocalStorage() {
+function getUsersFromLocalStorage() {
     try {
         const storedUsers = typeof localStorage !== "undefined" ? localStorage.getItem("users") : null;
     } catch (error) {
