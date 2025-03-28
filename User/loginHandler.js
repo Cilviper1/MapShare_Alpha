@@ -1,18 +1,39 @@
 // Function to get user data from localStorage
-function getUsersFromLocalStorage() {
-    const storedUsers = localStorage.getItem("users");
+function debugLocalStorage() {
+
+    if (typeof window !== 'undefined') {
+  
+      console.log('localStorage keys:', Object.keys(localStorage));
+  
+    } else {
+  
+      console.log('localStorage is not available in this environment.');
+  
+    }
+  
+  }
+
+
+  function getUsersFromLocalStorage() {
+    try {
+        const storedUsers = typeof localStorage !== "undefined" ? localStorage.getItem("users") : null;
+    } catch (error) {
+        console.log("Error getting users from localStorage", error);
+    }
     return storedUsers ? JSON.parse(storedUsers) : [];
 }
 
+
 // Function to save user data to localStorage
 function saveUsersToLocalStorage(users) {
-    localStorage.setItem("users", JSON.stringify(users));
+    if (typeof localStorage !== "undefined") {
+        localStorage.setItem("users", JSON.stringify(users));
+    }
 }
 
 // Array to store registered users
 let users = getUsersFromLocalStorage();
 console.log(users);
-
 
 
 // Function to register a new user
@@ -66,19 +87,23 @@ function registerUser() {
 
     // Clear the form
     document.getElementById("registrationForm").reset();
-    window.location.href = "login.html"; }
+    window.location.href = "login.html";
+}
 
 // Function to check if the email is unique
 function isEmailUnique(email) {
-    return users.some((user) => user.email === email); }
+    return users.some((user) => user.email === email);
+}
 
 // Function to check if the phone number is unique
 function isPhoneNumberUnique(phoneNumber) {
-    return users.some((user) => user.phoneNumber === phoneNumber); }
+    return users.some((user) => user.phoneNumber === phoneNumber);
+}
 
 // Function to generate a unique ID (simple increment for demonstration purposes)
 function generateUniqueId() {
-    return users.length + 1; }
+    return users.length + 1;
+}
 
 
 
@@ -94,12 +119,14 @@ function login() {
     // If no user found or password is incorrect, show an alert
     if (!user || user.password !== loginPassword) {
         alert("Invalid email or password. Please try again.");
-        return;     }
+        return;
+    }
     // If login is successful, store user information in sessionStorage
     localStorage.setItem("loggedInUser", JSON.stringify(user));
 
     // If login is successful, redirect to another page (e.g., welcome.html)
-    window.location.href = "user.html"; }
+    window.location.href = "user.html";
+}
 
 ///login page
 function testLogin() {
@@ -113,12 +140,14 @@ function testLogin() {
     // If no user found or password is incorrect, show an alert
     if (!user || user.password !== loginPassword) {
         alert("Invalid email or password. Please try again.");
-        return;     }
+        return;
+    }
     // If login is successful, store user information in sessionStorage
     localStorage.setItem("loggedInUser", JSON.stringify(user));
 
     // If login is successful, redirect to another page (e.g., welcome.html)
-    window.location.href = "user.html"; }
+    window.location.href = "user.html";
+}
 
 function getBase64Image(img) {
     var canvas = document.createElement("canvas");
@@ -130,20 +159,23 @@ function getBase64Image(img) {
 
     var dataURL = canvas.toDataURL("image/png");
 
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, ""); }
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+}
 
-// Function to change the nickname of the logged-in user
+    const loggedInUser = typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem("loggedInUser")) : null;
 function changeNickName(name) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const newName1 = name
 
     if (!loggedInUser) {
         alert("No user is currently logged in.");
-        return;    }
+        return;
+    }
 
     if (!newName1.trim()) {
         alert("Please enter a valid nickname.");
-        return;    }
+        return;
+    }
 
     // Update the nickname of the logged-in user
     loggedInUser.nickName = newName1;
@@ -154,7 +186,8 @@ function changeNickName(name) {
     const userIndex = users.findIndex((user) => user.id === loggedInUser.id);
     if (userIndex !== -1) {
         users[userIndex].nickName = newName1;
-        saveUsersToLocalStorage(users);}
+        saveUsersToLocalStorage(users);
+    }
 
     // Update the logged-in user in localStorage
     localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
